@@ -1,0 +1,362 @@
+<div class="container mx-auto px-4 py-8">
+  <div class="flex justify-between items-center mb-6">
+    <h1 class="text-3xl font-bold text-gray-800">Ride Sharing Dashboard</h1>
+    <a href="/ride-sharing/add" class="bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-lg transition duration-300 flex items-center">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+        <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
+      </svg>
+      Add New Entry
+    </a>
+  </div>
+
+  <!-- Filter Section -->
+  <div class="bg-white rounded-lg shadow-md p-4 mb-6">
+    <h2 class="text-xl font-semibold mb-4">Filter Results</h2>
+    <form action="/ride-sharing" method="GET" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div>
+        <label for="platform" class="block text-sm font-medium text-gray-700 mb-1">Platform</label>
+        <select id="platform" name="platform" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50">
+          <option value="All" <%= filters.platform === 'All' ? 'selected' : '' %>>All Platforms</option>
+          <option value="Uber" <%= filters.platform === 'Uber' ? 'selected' : '' %>>Uber</option>
+          <option value="Rapido" <%= filters.platform === 'Rapido' ? 'selected' : '' %>>Rapido</option>
+          <option value="Other" <%= filters.platform === 'Other' ? 'selected' : '' %>>Other</option>
+        </select>
+      </div>
+      <div>
+        <label for="startDate" class="block text-sm font-medium text-gray-700 mb-1">Start Date</label>
+        <input type="date" id="startDate" name="startDate" value="<%= filters.startDate %>" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50">
+      </div>
+      <div>
+        <label for="endDate" class="block text-sm font-medium text-gray-700 mb-1">End Date</label>
+        <input type="date" id="endDate" name="endDate" value="<%= filters.endDate %>" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50">
+      </div>
+      <div class="md:col-span-3 flex justify-end">
+        <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-lg transition duration-300">
+          Apply Filters
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Summary Cards -->
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+    <div class="bg-white rounded-lg shadow-md p-6 border-l-4 border-green-500">
+      <div class="flex justify-between items-start">
+        <div>
+          <p class="text-sm font-medium text-gray-500">Total Earnings</p>
+          <h3 class="text-2xl font-bold text-gray-800 mt-1">₹<%= summary.totalEarnings.toFixed(2) %></h3>
+        </div>
+        <div class="p-2 bg-green-100 rounded-full">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+        </div>
+      </div>
+      <p class="text-xs text-gray-500 mt-2">For period <%= dateRange.start %> - <%= dateRange.end %></p>
+    </div>
+
+    <div class="bg-white rounded-lg shadow-md p-6 border-l-4 border-red-500">
+      <div class="flex justify-between items-start">
+        <div>
+          <p class="text-sm font-medium text-gray-500">Total Expenses</p>
+          <h3 class="text-2xl font-bold text-gray-800 mt-1">₹<%= summary.totalExpenses.toFixed(2) %></h3>
+        </div>
+        <div class="p-2 bg-red-100 rounded-full">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+          </svg>
+        </div>
+      </div>
+      <p class="text-xs text-gray-500 mt-2">For period <%= dateRange.start %> - <%= dateRange.end %></p>
+    </div>
+
+    <div class="bg-white rounded-lg shadow-md p-6 border-l-4 border-blue-500">
+      <div class="flex justify-between items-start">
+        <div>
+          <p class="text-sm font-medium text-gray-500">Net Profit</p>
+          <h3 class="text-2xl font-bold text-gray-800 mt-1">₹<%= summary.netProfit.toFixed(2) %></h3>
+        </div>
+        <div class="p-2 bg-blue-100 rounded-full">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+          </svg>
+        </div>
+      </div>
+      <p class="text-xs text-gray-500 mt-2">For period <%= dateRange.start %> - <%= dateRange.end %></p>
+    </div>
+
+    <div class="bg-white rounded-lg shadow-md p-6 border-l-4 border-purple-500">
+      <div class="flex justify-between items-start">
+        <div>
+          <p class="text-sm font-medium text-gray-500">Total Trips</p>
+          <h3 class="text-2xl font-bold text-gray-800 mt-1"><%= summary.totalTrips %></h3>
+        </div>
+        <div class="p-2 bg-purple-100 rounded-full">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-purple-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+          </svg>
+        </div>
+      </div>
+      <p class="text-xs text-gray-500 mt-2">For period <%= dateRange.start %> - <%= dateRange.end %></p>
+    </div>
+  </div>
+
+  <!-- Performance Metrics -->
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+    <div class="bg-white rounded-lg shadow-md p-6">
+      <h2 class="text-xl font-semibold mb-4">Performance Metrics</h2>
+      <div class="space-y-4">
+        <div>
+          <div class="flex justify-between mb-1">
+            <span class="text-sm font-medium text-gray-700">Average Per Trip</span>
+            <span class="text-sm font-medium text-gray-700">₹<%= summary.averagePerTrip.toFixed(2) %></span>
+          </div>
+          <div class="w-full bg-gray-200 rounded-full h-2">
+            <div class="bg-blue-500 h-2 rounded-full" style="width: <%= Math.min(summary.averagePerTrip / 500 * 100, 100) %>%"></div>
+          </div>
+        </div>
+        <div>
+          <div class="flex justify-between mb-1">
+            <span class="text-sm font-medium text-gray-700">Average Per Hour</span>
+            <span class="text-sm font-medium text-gray-700">₹<%= summary.averagePerHour.toFixed(2) %></span>
+          </div>
+          <div class="w-full bg-gray-200 rounded-full h-2">
+            <div class="bg-green-500 h-2 rounded-full" style="width: <%= Math.min(summary.averagePerHour / 300 * 100, 100) %>%"></div>
+          </div>
+        </div>
+        <div>
+          <div class="flex justify-between mb-1">
+            <span class="text-sm font-medium text-gray-700">Total Hours</span>
+            <span class="text-sm font-medium text-gray-700"><%= summary.totalHours.toFixed(1) %> hrs</span>
+          </div>
+          <div class="w-full bg-gray-200 rounded-full h-2">
+            <div class="bg-purple-500 h-2 rounded-full" style="width: <%= Math.min(summary.totalHours / 100 * 100, 100) %>%"></div>
+          </div>
+        </div>
+        <div>
+          <div class="flex justify-between mb-1">
+            <span class="text-sm font-medium text-gray-700">Profit Margin</span>
+            <span class="text-sm font-medium text-gray-700"><%= summary.totalEarnings > 0 ? ((summary.netProfit / summary.totalEarnings) * 100).toFixed(1) : 0 %>%</span>
+          </div>
+          <div class="w-full bg-gray-200 rounded-full h-2">
+            <div class="bg-yellow-500 h-2 rounded-full" style="width: <%= summary.totalEarnings > 0 ? Math.min((summary.netProfit / summary.totalEarnings) * 100, 100) : 0 %>%"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Platform Comparison -->
+    <div class="bg-white rounded-lg shadow-md p-6">
+      <h2 class="text-xl font-semibold mb-4">Platform Comparison</h2>
+      <% if (platformSummaries && platformSummaries.length > 0) { %>
+        <div class="overflow-x-auto">
+          <table class="min-w-full divide-y divide-gray-200">
+            <thead>
+              <tr>
+                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Platform</th>
+                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Earnings</th>
+                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Profit</th>
+                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Avg/Trip</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-200">
+              <% platformSummaries.forEach(platform => { %>
+                <tr>
+                  <td class="px-4 py-3 text-sm font-medium text-gray-900"><%= platform._id %></td>
+                  <td class="px-4 py-3 text-sm text-gray-500">₹<%= platform.totalEarnings.toFixed(2) %></td>
+                  <td class="px-4 py-3 text-sm text-gray-500">₹<%= platform.netProfit.toFixed(2) %></td>
+                  <td class="px-4 py-3 text-sm text-gray-500">₹<%= platform.averagePerTrip.toFixed(2) %></td>
+                </tr>
+              <% }) %>
+            </tbody>
+          </table>
+        </div>
+      <% } else { %>
+        <p class="text-gray-500 text-center py-4">No platform data available for the selected period</p>
+      <% } %>
+    </div>
+  </div>
+
+  <!-- Monthly Trends Chart -->
+  <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+    <h2 class="text-xl font-semibold mb-4">Monthly Trends</h2>
+    <% if (trends && trends.length > 0) { %>
+      <div class="h-80">
+        <canvas id="monthlyTrendsChart"></canvas>
+      </div>
+      <script>
+        document.addEventListener('DOMContentLoaded', function() {
+          const ctx = document.getElementById('monthlyTrendsChart').getContext('2d');
+          
+          // Prepare data from server
+          const trends = <%- JSON.stringify(trends) %>;
+          const months = trends.map(t => t.month);
+          const earnings = trends.map(t => t.earnings);
+          const expenses = trends.map(t => t.expenses);
+          const profits = trends.map(t => t.profit);
+          
+          new Chart(ctx, {
+            type: 'line',
+            data: {
+              labels: months,
+              datasets: [
+                {
+                  label: 'Earnings',
+                  data: earnings,
+                  borderColor: '#10B981',
+                  backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                  borderWidth: 2,
+                  tension: 0.3,
+                  fill: false
+                },
+                {
+                  label: 'Expenses',
+                  data: expenses,
+                  borderColor: '#EF4444',
+                  backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                  borderWidth: 2,
+                  tension: 0.3,
+                  fill: false
+                },
+                {
+                  label: 'Net Profit',
+                  data: profits,
+                  borderColor: '#3B82F6',
+                  backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                  borderWidth: 2,
+                  tension: 0.3,
+                  fill: false
+                }
+              ]
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: {
+                legend: {
+                  position: 'top',
+                },
+                tooltip: {
+                  callbacks: {
+                    label: function(context) {
+                      let label = context.dataset.label || '';
+                      if (label) {
+                        label += ': ';
+                      }
+                      if (context.parsed.y !== null) {
+                        label += '₹' + context.parsed.y.toFixed(2);
+                      }
+                      return label;
+                    }
+                  }
+                }
+              },
+              scales: {
+                y: {
+                  beginAtZero: true,
+                  ticks: {
+                    callback: function(value) {
+                      return '₹' + value;
+                    }
+                  }
+                }
+              }
+            }
+          });
+        });
+      </script>
+    <% } else { %>
+      <p class="text-gray-500 text-center py-4">No trend data available</p>
+    <% } %>
+  </div>
+
+  <!-- Ride Entries Table -->
+  <div class="bg-white rounded-lg shadow-md p-6">
+    <h2 class="text-xl font-semibold mb-4">Ride Entries</h2>
+    <% if (rideEntries && rideEntries.length > 0) { %>
+      <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-200">
+          <thead>
+            <tr>
+              <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+              <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Platform</th>
+              <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Earnings</th>
+              <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Expenses</th>
+              <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Net</th>
+              <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Trips</th>
+              <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-200">
+            <% rideEntries.forEach(entry => { %>
+              <tr>
+                <td class="px-4 py-3 text-sm text-gray-500"><%= new Date(entry.date).toLocaleDateString() %></td>
+                <td class="px-4 py-3 text-sm font-medium text-gray-900"><%= entry.platform %></td>
+                <td class="px-4 py-3 text-sm text-gray-500">₹<%= entry.earnings.totalAmount.toFixed(2) %></td>
+                <td class="px-4 py-3 text-sm text-gray-500">₹<%= (entry.expenses.fuel + entry.expenses.maintenance + entry.expenses.commission + entry.expenses.tax + entry.expenses.otherExpenses).toFixed(2) %></td>
+                <td class="px-4 py-3 text-sm text-gray-500">₹<%= entry.netEarnings.toFixed(2) %></td>
+                <td class="px-4 py-3 text-sm text-gray-500"><%= entry.tripDetails.totalTrips %></td>
+                <td class="px-4 py-3 text-sm text-gray-500 whitespace-nowrap">
+                  <a href="/ride-sharing/<%= entry._id %>" class="text-blue-500 hover:text-blue-700 mr-3">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                    </svg>
+                  </a>
+                  <button class="text-red-500 hover:text-red-700 delete-entry" data-id="<%= entry._id %>">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                    </svg>
+                  </button>
+                </td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+    <% } else { %>
+      <p class="text-gray-500 text-center py-4">No ride entries found for the selected period</p>
+    <% } %>
+  </div>
+</div>
+
+<script>
+  // Delete entry functionality
+  document.addEventListener('DOMContentLoaded', function() {
+    const deleteButtons = document.querySelectorAll('.delete-entry');
+    
+    deleteButtons.forEach(button => {
+      button.addEventListener('click', function() {
+        const entryId = this.getAttribute('data-id');
+        
+        if (confirm('Are you sure you want to delete this entry? This action cannot be undone.')) {
+          fetch(`/ride-sharing/${entryId}`, {
+            method: 'DELETE',
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          })
+          .then(response => response.json())
+          .then(data => {
+            if (data.success) {
+              // Remove the row from the table
+              this.closest('tr').remove();
+              
+              // Show success message
+              alert('Entry deleted successfully');
+              
+              // Reload the page to update summary statistics
+              window.location.reload();
+            } else {
+              alert(data.message || 'Failed to delete entry');
+            }
+          })
+          .catch(error => {
+            console.error('Error:', error);
+            alert('An error occurred while deleting the entry');
+          });
+        }
+      });
+    });
+  });
+</script>

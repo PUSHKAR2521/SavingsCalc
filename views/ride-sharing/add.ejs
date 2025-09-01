@@ -1,0 +1,158 @@
+<div class="container mx-auto px-4 py-8">
+  <div class="flex justify-between items-center mb-6">
+    <h1 class="text-3xl font-bold text-gray-800">Add Ride Sharing Entry</h1>
+    <a href="/ride-sharing" class="bg-gray-500 hover:bg-gray-600 text-white font-medium py-2 px-4 rounded-lg transition duration-300 flex items-center">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+        <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd" />
+      </svg>
+      Back to Dashboard
+    </a>
+  </div>
+
+  <div class="bg-white rounded-lg shadow-md p-6">
+    <form action="/ride-sharing" method="POST" class="space-y-6">
+      <!-- Basic Information -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div>
+          <label for="platform" class="block text-sm font-medium text-gray-700 mb-1">Platform *</label>
+          <select id="platform" name="platform" required class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50">
+            <option value="">Select Platform</option>
+            <option value="Uber">Uber</option>
+            <option value="Rapido">Rapido</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+        <div>
+          <label for="date" class="block text-sm font-medium text-gray-700 mb-1">Date *</label>
+          <input type="date" id="date" name="date" required value="<%= new Date().toISOString().split('T')[0] %>" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50">
+        </div>
+        <div>
+          <label for="totalAmount" class="block text-sm font-medium text-gray-700 mb-1">Total Earnings (₹) *</label>
+          <input type="number" id="totalAmount" name="totalAmount" required step="0.01" min="0" placeholder="0.00" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50">
+        </div>
+      </div>
+
+      <!-- Earnings Breakdown -->
+      <div>
+        <h3 class="text-lg font-medium text-gray-900 mb-3">Earnings Breakdown</h3>
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+          <div>
+            <label for="baseFare" class="block text-sm font-medium text-gray-700 mb-1">Base Fare (₹)</label>
+            <input type="number" id="baseFare" name="baseFare" step="0.01" min="0" placeholder="0.00" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50">
+          </div>
+          <div>
+            <label for="tips" class="block text-sm font-medium text-gray-700 mb-1">Tips (₹)</label>
+            <input type="number" id="tips" name="tips" step="0.01" min="0" placeholder="0.00" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50">
+          </div>
+          <div>
+            <label for="incentives" class="block text-sm font-medium text-gray-700 mb-1">Incentives (₹)</label>
+            <input type="number" id="incentives" name="incentives" step="0.01" min="0" placeholder="0.00" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50">
+          </div>
+          <div>
+            <label for="otherEarnings" class="block text-sm font-medium text-gray-700 mb-1">Other Earnings (₹)</label>
+            <input type="number" id="otherEarnings" name="otherEarnings" step="0.01" min="0" placeholder="0.00" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50">
+          </div>
+        </div>
+      </div>
+
+      <!-- Trip Details -->
+      <div>
+        <h3 class="text-lg font-medium text-gray-900 mb-3">Trip Details</h3>
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+          <div>
+            <label for="totalTrips" class="block text-sm font-medium text-gray-700 mb-1">Total Trips *</label>
+            <input type="number" id="totalTrips" name="totalTrips" required min="1" placeholder="0" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50">
+          </div>
+          <div>
+            <label for="totalDistance" class="block text-sm font-medium text-gray-700 mb-1">Total Distance (km)</label>
+            <input type="number" id="totalDistance" name="totalDistance" step="0.1" min="0" placeholder="0.0" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50">
+          </div>
+          <div>
+            <label for="totalHours" class="block text-sm font-medium text-gray-700 mb-1">Total Hours</label>
+            <input type="number" id="totalHours" name="totalHours" step="0.5" min="0" placeholder="0.0" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50">
+          </div>
+          <div>
+            <label for="averageRating" class="block text-sm font-medium text-gray-700 mb-1">Average Rating</label>
+            <input type="number" id="averageRating" name="averageRating" step="0.1" min="0" max="5" placeholder="0.0" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50">
+          </div>
+        </div>
+      </div>
+
+      <!-- Expenses -->
+      <div>
+        <h3 class="text-lg font-medium text-gray-900 mb-3">Expenses</h3>
+        <div class="grid grid-cols-1 md:grid-cols-5 gap-6">
+          <div>
+            <label for="fuelExpense" class="block text-sm font-medium text-gray-700 mb-1">Fuel (₹)</label>
+            <input type="number" id="fuelExpense" name="fuelExpense" step="0.01" min="0" placeholder="0.00" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50">
+          </div>
+          <div>
+            <label for="maintenanceExpense" class="block text-sm font-medium text-gray-700 mb-1">Maintenance (₹)</label>
+            <input type="number" id="maintenanceExpense" name="maintenanceExpense" step="0.01" min="0" placeholder="0.00" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50">
+          </div>
+          <div>
+            <label for="commissionExpense" class="block text-sm font-medium text-gray-700 mb-1">Commission (₹)</label>
+            <input type="number" id="commissionExpense" name="commissionExpense" step="0.01" min="0" placeholder="0.00" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50">
+          </div>
+          <div>
+            <label for="taxExpense" class="block text-sm font-medium text-gray-700 mb-1">Tax (₹)</label>
+            <input type="number" id="taxExpense" name="taxExpense" step="0.01" min="0" placeholder="0.00" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50">
+          </div>
+          <div>
+            <label for="otherExpenses" class="block text-sm font-medium text-gray-700 mb-1">Other (₹)</label>
+            <input type="number" id="otherExpenses" name="otherExpenses" step="0.01" min="0" placeholder="0.00" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50">
+          </div>
+        </div>
+      </div>
+
+      <!-- Notes -->
+      <div>
+        <label for="notes" class="block text-sm font-medium text-gray-700 mb-1">Notes</label>
+        <textarea id="notes" name="notes" rows="3" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50" placeholder="Add any additional notes or comments here"></textarea>
+      </div>
+
+      <!-- Submit Button -->
+      <div class="flex justify-end">
+        <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-6 rounded-lg transition duration-300">
+          Save Entry
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Auto-calculate total from breakdown
+    const baseFare = document.getElementById('baseFare');
+    const tips = document.getElementById('tips');
+    const incentives = document.getElementById('incentives');
+    const otherEarnings = document.getElementById('otherEarnings');
+    const totalAmount = document.getElementById('totalAmount');
+    
+    // Function to update total
+    function updateTotal() {
+      const baseValue = parseFloat(baseFare.value) || 0;
+      const tipsValue = parseFloat(tips.value) || 0;
+      const incentivesValue = parseFloat(incentives.value) || 0;
+      const otherValue = parseFloat(otherEarnings.value) || 0;
+      
+      const total = baseValue + tipsValue + incentivesValue + otherValue;
+      
+      // Only update if the user hasn't manually entered a different total
+      if (!totalAmount.dataset.manualEntry) {
+        totalAmount.value = total.toFixed(2);
+      }
+    }
+    
+    // Add event listeners to breakdown fields
+    [baseFare, tips, incentives, otherEarnings].forEach(field => {
+      field.addEventListener('input', updateTotal);
+    });
+    
+    // Track if user manually edits the total
+    totalAmount.addEventListener('input', function() {
+      totalAmount.dataset.manualEntry = true;
+    });
+  });
+</script>

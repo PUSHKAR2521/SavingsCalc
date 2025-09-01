@@ -1,0 +1,168 @@
+<%- include('../layouts/main') %>
+
+<div class="container mx-auto px-4 py-8">
+  <div class="flex justify-between items-center mb-6">
+    <h1 class="text-3xl font-bold text-gray-800">Edit Income</h1>
+    <a href="/income" class="bg-gray-500 hover:bg-gray-600 text-white font-medium py-2 px-4 rounded-lg transition duration-300 flex items-center">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+        <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd" />
+      </svg>
+      Back to Income
+    </a>
+  </div>
+
+  <div class="bg-white rounded-lg shadow-md p-6">
+    <form action="/income/<%= income._id %>?_method=PUT" method="POST" class="space-y-6">
+      <!-- Basic Information -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
+          <label for="source" class="block text-sm font-medium text-gray-700 mb-1">Source *</label>
+          <select id="source" name="source" required class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50">
+            <option value="">Select Source</option>
+            <option value="Salary" <%= income.source === 'Salary' ? 'selected' : '' %>>Salary</option>
+            <option value="Freelance" <%= income.source === 'Freelance' ? 'selected' : '' %>>Freelance</option>
+            <option value="Business" <%= income.source === 'Business' ? 'selected' : '' %>>Business</option>
+            <option value="Investments" <%= income.source === 'Investments' ? 'selected' : '' %>>Investments</option>
+            <option value="Rental" <%= income.source === 'Rental' ? 'selected' : '' %>>Rental</option>
+            <option value="Ride Sharing" <%= income.source === 'Ride Sharing' ? 'selected' : '' %>>Ride Sharing</option>
+            <option value="Other" <%= income.source === 'Other' ? 'selected' : '' %>>Other</option>
+          </select>
+        </div>
+        <div>
+          <label for="amount" class="block text-sm font-medium text-gray-700 mb-1">Amount (₹) *</label>
+          <input type="number" id="amount" name="amount" required step="0.01" min="0" value="<%= income.amount %>" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50">
+        </div>
+      </div>
+
+      <!-- Description and Date -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
+          <label for="description" class="block text-sm font-medium text-gray-700 mb-1">Description</label>
+          <input type="text" id="description" name="description" value="<%= income.description || '' %>" placeholder="Brief description of the income" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50">
+        </div>
+        <div>
+          <label for="date" class="block text-sm font-medium text-gray-700 mb-1">Date</label>
+          <input type="date" id="date" name="date" value="<%= income.date.toISOString().split('T')[0] %>" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50">
+        </div>
+      </div>
+
+      <!-- Ride Sharing Details (conditionally shown) -->
+      <div id="rideSharingDetails" class="border-t pt-4 <%= income.source === 'Ride Sharing' ? '' : 'hidden' %>">
+        <h3 class="text-lg font-medium text-gray-800 mb-4">Ride Sharing Details</h3>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
+          <div>
+            <label for="platform" class="block text-sm font-medium text-gray-700 mb-1">Platform</label>
+            <select id="platform" name="platform" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50">
+              <option value="Uber" <%= income.rideSharing && income.rideSharing.platform === 'Uber' ? 'selected' : '' %>>Uber</option>
+              <option value="Ola" <%= income.rideSharing && income.rideSharing.platform === 'Ola' ? 'selected' : '' %>>Ola</option>
+              <option value="Rapido" <%= income.rideSharing && income.rideSharing.platform === 'Rapido' ? 'selected' : '' %>>Rapido</option>
+              <option value="Other" <%= income.rideSharing && income.rideSharing.platform === 'Other' ? 'selected' : '' %>>Other</option>
+            </select>
+          </div>
+          <div>
+            <label for="totalTrips" class="block text-sm font-medium text-gray-700 mb-1">Total Trips</label>
+            <input type="number" id="totalTrips" name="tripDetails[totalTrips]" min="0" value="<%= income.rideSharing && income.rideSharing.tripDetails ? income.rideSharing.tripDetails.totalTrips : '' %>" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-4">
+          <div>
+            <label for="distance" class="block text-sm font-medium text-gray-700 mb-1">Total Distance (km)</label>
+            <input type="number" id="distance" name="tripDetails[distance]" step="0.1" min="0" value="<%= income.rideSharing && income.rideSharing.tripDetails ? income.rideSharing.tripDetails.distance : '' %>" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50">
+          </div>
+          <div>
+            <label for="hours" class="block text-sm font-medium text-gray-700 mb-1">Total Hours</label>
+            <input type="number" id="hours" name="tripDetails[hours]" step="0.5" min="0" value="<%= income.rideSharing && income.rideSharing.tripDetails ? income.rideSharing.tripDetails.hours : '' %>" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50">
+          </div>
+          <div>
+            <label for="rating" class="block text-sm font-medium text-gray-700 mb-1">Average Rating</label>
+            <input type="number" id="rating" name="tripDetails[averageRating]" step="0.1" min="1" max="5" value="<%= income.rideSharing && income.rideSharing.tripDetails ? income.rideSharing.tripDetails.averageRating : '' %>" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50">
+          </div>
+        </div>
+
+        <h4 class="text-md font-medium text-gray-700 mb-2">Earnings Breakdown</h4>
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-4">
+          <div>
+            <label for="baseFare" class="block text-sm font-medium text-gray-700 mb-1">Base Fare (₹)</label>
+            <input type="number" id="baseFare" name="earnings[baseFare]" step="0.01" min="0" value="<%= income.rideSharing && income.rideSharing.earnings ? income.rideSharing.earnings.baseFare : '' %>" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 earning-component">
+          </div>
+          <div>
+            <label for="tips" class="block text-sm font-medium text-gray-700 mb-1">Tips (₹)</label>
+            <input type="number" id="tips" name="earnings[tips]" step="0.01" min="0" value="<%= income.rideSharing && income.rideSharing.earnings ? income.rideSharing.earnings.tips : '' %>" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 earning-component">
+          </div>
+          <div>
+            <label for="incentives" class="block text-sm font-medium text-gray-700 mb-1">Incentives (₹)</label>
+            <input type="number" id="incentives" name="earnings[incentives]" step="0.01" min="0" value="<%= income.rideSharing && income.rideSharing.earnings ? income.rideSharing.earnings.incentives : '' %>" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 earning-component">
+          </div>
+          <div>
+            <label for="otherEarnings" class="block text-sm font-medium text-gray-700 mb-1">Other (₹)</label>
+            <input type="number" id="otherEarnings" name="earnings[other]" step="0.01" min="0" value="<%= income.rideSharing && income.rideSharing.earnings ? income.rideSharing.earnings.other : '' %>" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 earning-component">
+          </div>
+        </div>
+
+        <h4 class="text-md font-medium text-gray-700 mb-2">Expenses</h4>
+        <div class="grid grid-cols-1 md:grid-cols-5 gap-6">
+          <div>
+            <label for="fuel" class="block text-sm font-medium text-gray-700 mb-1">Fuel (₹)</label>
+            <input type="number" id="fuel" name="expenses[fuel]" step="0.01" min="0" value="<%= income.rideSharing && income.rideSharing.expenses ? income.rideSharing.expenses.fuel : '' %>" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50">
+          </div>
+          <div>
+            <label for="maintenance" class="block text-sm font-medium text-gray-700 mb-1">Maintenance (₹)</label>
+            <input type="number" id="maintenance" name="expenses[maintenance]" step="0.01" min="0" value="<%= income.rideSharing && income.rideSharing.expenses ? income.rideSharing.expenses.maintenance : '' %>" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50">
+          </div>
+          <div>
+            <label for="commission" class="block text-sm font-medium text-gray-700 mb-1">Commission (₹)</label>
+            <input type="number" id="commission" name="expenses[commission]" step="0.01" min="0" value="<%= income.rideSharing && income.rideSharing.expenses ? income.rideSharing.expenses.commission : '' %>" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50">
+          </div>
+          <div>
+            <label for="tax" class="block text-sm font-medium text-gray-700 mb-1">Tax (₹)</label>
+            <input type="number" id="tax" name="expenses[tax]" step="0.01" min="0" value="<%= income.rideSharing && income.rideSharing.expenses ? income.rideSharing.expenses.tax : '' %>" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50">
+          </div>
+          <div>
+            <label for="otherExpenses" class="block text-sm font-medium text-gray-700 mb-1">Other (₹)</label>
+            <input type="number" id="otherExpenses" name="expenses[other]" step="0.01" min="0" value="<%= income.rideSharing && income.rideSharing.expenses ? income.rideSharing.expenses.other : '' %>" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50">
+          </div>
+        </div>
+      </div>
+
+      <!-- Submit Button -->
+      <div class="flex justify-end">
+        <button type="submit" class="bg-green-500 hover:bg-green-600 text-white font-medium py-2 px-6 rounded-lg transition duration-300">
+          Update Income
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const sourceSelect = document.getElementById('source');
+    const rideSharingDetails = document.getElementById('rideSharingDetails');
+    const amountInput = document.getElementById('amount');
+    const earningComponents = document.querySelectorAll('.earning-component');
+    
+    // Show/hide ride sharing details based on source selection
+    sourceSelect.addEventListener('change', function() {
+      if (this.value === 'Ride Sharing') {
+        rideSharingDetails.classList.remove('hidden');
+      } else {
+        rideSharingDetails.classList.add('hidden');
+      }
+    });
+    
+    // Auto-calculate total amount from earning components
+    function updateTotalAmount() {
+      let total = 0;
+      earningComponents.forEach(component => {
+        total += parseFloat(component.value || 0);
+      });
+      amountInput.value = total.toFixed(2);
+    }
+    
+    earningComponents.forEach(component => {
+      component.addEventListener('input', updateTotalAmount);
+    });
+  });
+</script>

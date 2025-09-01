@@ -1,0 +1,61 @@
+<nav class="bg-blue-600 text-white shadow-lg">
+  <div class="container mx-auto px-4">
+    <div class="flex justify-between items-center py-4">
+      <div class="flex items-center">
+        <a href="/" class="text-xl font-bold">SavingsCalc</a>
+      </div>
+      
+      <div class="hidden md:flex space-x-4">
+        <% if(locals.user) { %>
+          <a href="/dashboard" class="hover:text-blue-200">Dashboard</a>
+          <a href="/income" class="hover:text-blue-200">Income</a>
+          <a href="/expenses" class="hover:text-blue-200">Expenses</a>
+          <a href="/ride-sharing" class="hover:text-blue-200">Ride Sharing</a>
+          <div class="relative group">
+            <button class="flex items-center hover:text-blue-200">
+              <%= locals.user.name %> <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50 hidden group-hover:block">
+              <a href="/auth/logout" class="block px-4 py-2 text-gray-800 hover:bg-blue-500 hover:text-white">Logout</a>
+            </div>
+          </div>
+        <% } else { %>
+          <a href="/auth/login" class="hover:text-blue-200">Login</a>
+          <a href="/auth/register" class="hover:text-blue-200">Register</a>
+        <% } %>
+      </div>
+      
+      <!-- Mobile menu button -->
+      <div class="md:hidden flex items-center">
+        <button class="mobile-menu-button">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Mobile menu -->
+  <div class="mobile-menu hidden md:hidden">
+    <div class="container mx-auto px-4 py-2">
+      <% if(locals.user) { %>
+        <a href="/dashboard" class="block py-2 hover:text-blue-200">Dashboard</a>
+        <a href="/income" class="block py-2 hover:text-blue-200">Income</a>
+        <a href="/expense" class="block py-2 hover:text-blue-200">Expenses</a>
+        <a href="/ride-sharing" class="block py-2 hover:text-blue-200">Ride Sharing</a>
+        <a href="/auth/logout" class="block py-2 hover:text-blue-200">Logout</a>
+      <% } else { %>
+        <a href="/auth/login" class="block py-2 hover:text-blue-200">Login</a>
+        <a href="/auth/register" class="block py-2 hover:text-blue-200">Register</a>
+      <% } %>
+    </div>
+  </div>
+</nav>
+
+<script>
+  // Mobile menu toggle
+  document.querySelector('.mobile-menu-button').addEventListener('click', function() {
+    document.querySelector('.mobile-menu').classList.toggle('hidden');
+  });
+</script>

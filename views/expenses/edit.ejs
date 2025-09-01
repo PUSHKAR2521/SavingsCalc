@@ -1,0 +1,111 @@
+<div class="container mx-auto px-4 py-8">
+  <div class="flex justify-between items-center mb-6">
+    <h1 class="text-3xl font-bold text-gray-800">Edit Expense</h1>
+    <a href="/expenses" class="bg-gray-500 hover:bg-gray-600 text-white font-medium py-2 px-4 rounded-lg transition duration-300 flex items-center">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+        <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd" />
+      </svg>
+      Back to Expenses
+    </a>
+  </div>
+
+  <div class="bg-white rounded-lg shadow-md p-6">
+    <form action="/expenses/<%= expense._id %>?_method=PUT" method="POST" class="space-y-6">
+      <!-- Basic Information -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
+          <label for="category" class="block text-sm font-medium text-gray-700 mb-1">Category *</label>
+          <select id="category" name="category" required class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50">
+            <option value="">Select Category</option>
+            <option value="Housing" <%= expense.category === 'Housing' ? 'selected' : '' %>>Housing</option>
+            <option value="Transportation" <%= expense.category === 'Transportation' ? 'selected' : '' %>>Transportation</option>
+            <option value="Food" <%= expense.category === 'Food' ? 'selected' : '' %>>Food</option>
+            <option value="Utilities" <%= expense.category === 'Utilities' ? 'selected' : '' %>>Utilities</option>
+            <option value="Insurance" <%= expense.category === 'Insurance' ? 'selected' : '' %>>Insurance</option>
+            <option value="Healthcare" <%= expense.category === 'Healthcare' ? 'selected' : '' %>>Healthcare</option>
+            <option value="Entertainment" <%= expense.category === 'Entertainment' ? 'selected' : '' %>>Entertainment</option>
+            <option value="Personal" <%= expense.category === 'Personal' ? 'selected' : '' %>>Personal</option>
+            <option value="Education" <%= expense.category === 'Education' ? 'selected' : '' %>>Education</option>
+            <option value="Debt" <%= expense.category === 'Debt' ? 'selected' : '' %>>Debt</option>
+            <option value="Other" <%= expense.category === 'Other' ? 'selected' : '' %>>Other</option>
+          </select>
+        </div>
+        <div>
+          <label for="amount" class="block text-sm font-medium text-gray-700 mb-1">Amount (₹) *</label>
+          <input type="number" id="amount" name="amount" required step="0.01" min="0" value="<%= expense.amount %>" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50">
+        </div>
+      </div>
+
+      <!-- Description and Date -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
+          <label for="description" class="block text-sm font-medium text-gray-700 mb-1">Description</label>
+          <input type="text" id="description" name="description" value="<%= expense.description %>" placeholder="Brief description of the expense" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50">
+        </div>
+        <div>
+          <label for="date" class="block text-sm font-medium text-gray-700 mb-1">Date</label>
+          <input type="date" id="date" name="date" value="<%= expense.date.toISOString().split('T')[0] %>" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50">
+        </div>
+      </div>
+
+      <!-- Payment Method -->
+      <div>
+        <label for="paymentMethod" class="block text-sm font-medium text-gray-700 mb-1">Payment Method</label>
+        <select id="paymentMethod" name="paymentMethod" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50">
+          <option value="Cash" <%= expense.paymentMethod === 'Cash' ? 'selected' : '' %>>Cash</option>
+          <option value="Credit Card" <%= expense.paymentMethod === 'Credit Card' ? 'selected' : '' %>>Credit Card</option>
+          <option value="Debit Card" <%= expense.paymentMethod === 'Debit Card' ? 'selected' : '' %>>Debit Card</option>
+          <option value="UPI" <%= expense.paymentMethod === 'UPI' ? 'selected' : '' %>>UPI</option>
+          <option value="Bank Transfer" <%= expense.paymentMethod === 'Bank Transfer' ? 'selected' : '' %>>Bank Transfer</option>
+          <option value="Other" <%= expense.paymentMethod === 'Other' ? 'selected' : '' %>>Other</option>
+        </select>
+      </div>
+
+      <!-- Recurring Expense -->
+      <div class="border-t pt-4">
+        <div class="flex items-start">
+          <div class="flex items-center h-5">
+            <input id="recurring" name="recurring" type="checkbox" <%= expense.recurring ? 'checked' : '' %> class="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
+          </div>
+          <div class="ml-3">
+            <label for="recurring" class="text-sm font-medium text-gray-700">This is a recurring expense</label>
+            <p class="text-xs text-gray-500">Check this if the expense repeats regularly</p>
+          </div>
+        </div>
+
+        <div id="recurringOptions" class="mt-4 <%= expense.recurring ? '' : 'hidden' %>">
+          <label for="recurringFrequency" class="block text-sm font-medium text-gray-700 mb-1">Frequency</label>
+          <select id="recurringFrequency" name="recurringFrequency" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50">
+            <option value="Daily" <%= expense.recurringFrequency === 'Daily' ? 'selected' : '' %>>Daily</option>
+            <option value="Weekly" <%= expense.recurringFrequency === 'Weekly' ? 'selected' : '' %>>Weekly</option>
+            <option value="Monthly" <%= expense.recurringFrequency === 'Monthly' ? 'selected' : '' %>>Monthly</option>
+            <option value="Yearly" <%= expense.recurringFrequency === 'Yearly' ? 'selected' : '' %>>Yearly</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Submit Button -->
+      <div class="flex justify-end">
+        <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-6 rounded-lg transition duration-300">
+          Update Expense
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const recurringCheckbox = document.getElementById('recurring');
+    const recurringOptions = document.getElementById('recurringOptions');
+    
+    // Show/hide recurring options based on checkbox
+    recurringCheckbox.addEventListener('change', function() {
+      if (this.checked) {
+        recurringOptions.classList.remove('hidden');
+      } else {
+        recurringOptions.classList.add('hidden');
+      }
+    });
+  });
+</script>
